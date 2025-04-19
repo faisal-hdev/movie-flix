@@ -5,6 +5,7 @@ import axios from "axios";
 import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
 import { useDebounce } from "react-use";
+import Footer from "./components/Footer";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -20,7 +21,6 @@ function App() {
   // Debounce the search term to prevent making too many API request
   // by waiting for the user stop typing for 500ms
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
-  // Add initial project setup with Vite, Tailwind CSS basic structure for frontend and implement movie search feature
 
   const fetchMovies = async (query = "") => {
     console.log(query);
@@ -28,8 +28,7 @@ function App() {
     setErrorMessage("");
     try {
       const endPoint = query
-        ? // ? `${API_BASE_URL}/discover/movie?query=${encodeURIComponent(query)}`
-          `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
         : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
       const response = await axios.get(endPoint, {
         headers: { Authorization: `Bearer ${API_KEY}` },
@@ -48,7 +47,7 @@ function App() {
     fetchMovies(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
   return (
-    <main>
+    <main className="overflow-hidden">
       <div className="pattern"></div>
       <div className="wrapper">
         <header>
@@ -74,6 +73,7 @@ function App() {
           )}
           {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         </section>
+        <Footer />
       </div>
     </main>
   );
